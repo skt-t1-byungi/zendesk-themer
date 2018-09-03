@@ -1,0 +1,17 @@
+{
+  "name": "zendesk-themer",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "ava": "^0.25.0",
+    "eslint": "^5.5.0",
+    "eslint-config-byungi": "^0.0.18"
+  },
+  "eslintConfig": {
+    "extends": "byungi"
+  },
+  "dependencies": {
+    "puppeteer": "^1.7.0"
+  }
+}
