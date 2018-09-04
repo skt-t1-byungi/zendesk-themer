@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer'
 import url from 'url'
 
-export default class Client {
+export default class Browser {
   constructor (browser, domain) {
     this._browser = browser
     this._domain = domain
