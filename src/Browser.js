@@ -9,7 +9,11 @@ export default class Client {
 
   static async login ({domain, email, password, ...opts}) {
     const browser = new this(await puppeteer.launch(opts), domain)
-    await browser._login(email, password)
+
+    if (!await browser._login(email, password)) {
+      throw new Error('Login failed.')
+    }
+
     return browser
   }
 
@@ -25,11 +29,15 @@ export default class Client {
     // attempt login
     await iframe.type('#user_email', email)
     await iframe.type('#user_password', password)
-    await (await iframe.$('[type="submit"]')).click()
 
-    await page.waitForNavigation()
+    const p = new Promise(resolve => page.once('framenavigated', resolve))
+    await iframe.$eval('form#login-form', form => form.submit())
+    await p
 
-    // return !res.url().includes('/login')
+    const cookies = await page.cookies()
+    await page.close() // clear
+
+    return cookies.some(cookie => cookie.name === '_zendesk_session')
   }
 
   _url (path) {

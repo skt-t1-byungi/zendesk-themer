@@ -3,14 +3,21 @@ import test from 'ava'
 import env from './env.json'
 
 test('login', async t => {
-  // const client = await Browser.login({
-  //   domain: env.domain,
-  //   email: env.email + '',
-  //   password: env.password,
-  //   devtools: true,
-  //   headless: false,
-  //   slowMo: 50
-  // })
+  t.plan(2)
 
-  t.pass()
+  // login error
+  await Browser.login({
+    domain: env.domain,
+    email: 'test',
+    password: 'wrong'
+  }).then(() => t.fail())
+    .catch(() => t.pass())
+
+  const browser = await Browser.login({
+    domain: env.domain,
+    email: env.email,
+    password: env.password
+  })
+
+  t.true(browser instanceof Browser)
 })
