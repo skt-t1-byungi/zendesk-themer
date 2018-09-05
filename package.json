@@ -13,12 +13,17 @@
     "esm": "^3.0.82"
   },
   "eslintConfig": {
-    "extends": "byungi"
+    "extends": "byungi",
+    "env": {
+      "browser": true
+    }
   },
   "dependencies": {
     "puppeteer": "^1.7.0"
   },
   "ava": {
-    "require": ["esm"]
+    "require": [
+      "esm"
+    ]
   }
 }
