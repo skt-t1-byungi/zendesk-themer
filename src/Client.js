@@ -1,5 +1,6 @@
 import puppeteer from 'puppeteer'
 import url from 'url'
+import download from 'download'
 import path from 'path'
 
 /** @type {puppeteer.Browser} */
@@ -10,6 +11,7 @@ export default class Client {
   constructor (domain) {
     if (!browser) throw new Error('Invalid call.')
     this._domain = domain
+    this._host = url.parse(domain).host
   }
 
   static async login ({domain, email, password}, opts) {
@@ -30,6 +32,8 @@ export default class Client {
 
     // move login page
     await page.goto(this._url('/hc/signin'))
+    if (await this._isLogin(page)) return true
+
     const iframe = await (await page.$('iframe')).contentFrame()
     await iframe.waitFor('#login-form')
 
@@ -41,9 +45,15 @@ export default class Client {
     await iframe.$eval('form#login-form', form => form.submit())
     await p
 
-    const cookies = await page.cookies()
-    await page.close() // clear
+    try {
+      return this._isLogin(page)
+    } finally {
+      page.close()
+    }
+  }
 
+  async _isLogin (page) {
+    const cookies = await page.cookies()
     return cookies.some(cookie => cookie.name === '_zendesk_session')
   }
 
@@ -51,7 +61,7 @@ export default class Client {
     return url.resolve(this._domain, path)
   }
 
-  async downloadTheme (downPath) {
+  async downloadTheme (dest = path.join(process.cwd(), this._host)) {
     const page = await browser.newPage()
     await page.goto(this._url('/theming/workbench'))
     await page.waitFor('a[href^="/theming/theme"]')
@@ -62,7 +72,7 @@ export default class Client {
     const [, themeId] = (await page.$eval('a[href^="/theming/theme"]', el => el.href)).match(/\/([^/]*?)$/)
     await pAddScript
 
-    const data = await page.evaluate(themeId => (
+    const downloadUrl = await page.evaluate(themeId => (
       graphQl(`
       mutation($input: CreateExportThemeJobInputType!) {
         createExportThemeJob(input: $input) {
@@ -70,7 +80,11 @@ export default class Client {
           download_url
         }
       }`, { input: {theme_id: themeId} })
+        .then(res => res.data.createExportThemeJob.download_url)
     ), themeId)
+
+    page.close()
+    await download(downloadUrl, dest, {extract: true})
   }
 }
 
