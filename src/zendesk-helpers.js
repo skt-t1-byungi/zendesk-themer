@@ -40,7 +40,7 @@ async function waitJob (jobId) {
   const status = await graphQl(`{job(id: "${jobId}") { status }}`)
     .then(json => json.data.job.status)
 
-  return status === 'completed' || delay(500).then(() => waitJob(jobId))
+  return status === 'completed' || delay(250).then(() => waitJob(jobId))
 }
 
 function delay (ms) {
