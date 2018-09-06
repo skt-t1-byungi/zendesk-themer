@@ -45,11 +45,10 @@ export default class Client {
     await iframe.$eval('form#login-form', form => form.submit())
     await p
 
-    try {
-      return this._isLogin(page)
-    } finally {
-      page.close()
-    }
+    const result = await this._isLogin(page)
+    page.close()
+
+    return result
   }
 
   async _isLogin (page) {
@@ -67,40 +66,18 @@ export default class Client {
     await page.waitFor('a[href^="/theming/theme"]')
 
     // inject helper
-    const pAddScript = page.addScriptTag({content: graphQl.toString()})
+    const pAddScript = page.addScriptTag({
+      path: path.resolve(__dirname, 'zendesk-helpers.js')
+    })
 
     const [, themeId] = (await page.$eval('a[href^="/theming/theme"]', el => el.href)).match(/\/([^/]*?)$/)
     await pAddScript
 
     const downloadUrl = await page.evaluate(themeId => (
-      graphQl(`
-      mutation($input: CreateExportThemeJobInputType!) {
-        createExportThemeJob(input: $input) {
-          job_id,
-          download_url
-        }
-      }`, { input: {theme_id: themeId} })
-        .then(res => res.data.createExportThemeJob.download_url)
+      exportTheme(themeId) // eslint-disable-line
     ), themeId)
 
     page.close()
-    await download(downloadUrl, dest, {extract: true})
+    await download(downloadUrl, dest, { extract: true })
   }
-}
-
-async function graphQl (query, variables = null) {
-  const headers = new Headers()
-  headers.append('X-CSRF-Token', window.THEMING.CSRFToken)
-
-  const body = new FormData()
-  body.append('graphql', JSON.stringify({ query, variables }))
-
-  const res = await fetch('/theming/graphql', {
-    method: 'post',
-    credentials: 'same-origin',
-    body,
-    headers
-  })
-
-  return res.json()
 }

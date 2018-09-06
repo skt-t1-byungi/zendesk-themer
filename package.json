@@ -8,10 +8,10 @@
   },
   "devDependencies": {
     "ava": "^0.25.0",
+    "del": "^3.0.0",
     "eslint": "^5.5.0",
     "eslint-config-byungi": "^0.0.18",
-    "esm": "^3.0.82",
-    "fs-extra": "^7.0.0"
+    "esm": "^3.0.82"
   },
   "eslintConfig": {
     "extends": "byungi",
