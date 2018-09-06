@@ -3,6 +3,8 @@ import url from 'url'
 import download from 'download'
 import path from 'path'
 
+const zenHelpers = path.resolve(__dirname, 'zendesk-helpers.js')
+
 /** @type {puppeteer.Browser} */
 let browser
 let pBrowser
@@ -66,9 +68,7 @@ export default class Client {
     await page.waitFor('a[href^="/theming/theme"]')
 
     // inject helper
-    const pAddScript = page.addScriptTag({
-      path: path.resolve(__dirname, 'zendesk-helpers.js')
-    })
+    const pAddScript = page.addScriptTag({path: zenHelpers})
 
     const [, themeId] = (await page.$eval('a[href^="/theming/theme"]', el => el.href)).match(/\/([^/]*?)$/)
     await pAddScript
