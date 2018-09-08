@@ -20,7 +20,7 @@
     "got": "^9.2.1",
     "puppeteer": "^1.7.0",
     "temp-write": "^3.4.0"
-  },  
+  },
   "eslintConfig": {
     "extends": "byungi"
   },

@@ -2,7 +2,7 @@ import getBrowser from './getBrowser'
 import url from 'url'
 import download from 'download'
 import path from 'path'
-import s3Upload from './s3-upload'
+import s3Upload from './s3Upload'
 
 export default class Client {
   constructor (browser, domain) {
@@ -58,7 +58,6 @@ export default class Client {
 
   async downloadTheme (dest = path.join(process.cwd(), this._host)) {
     const themePage = await this._openThemePage()
-
     const [, themeId] = (await themePage.$eval('a[href^="/theming/theme"]', el => el.href)).match(/\/([^/]*?)$/)
 
     const downloadUrl = await themePage.evaluate(themeId => (
@@ -69,16 +68,25 @@ export default class Client {
     await download(downloadUrl, dest, { extract: true })
   }
 
-  async uploadTheme (src) {
+  async uploadTheme (srcDir) {
     const themePage = await this._openThemePage()
 
     const job = await themePage.evaluate(() => (
       createImportThemeJob()// eslint-disable-line
     ))
-
-    await s3Upload(job.uploadUrl, src, job.uploadParams)
+    await this._s3Upload(job.uploadUrl, srcDir, job.uploadParams)
+    await themePage.evaluate(jobId => (
+      waitJob(jobId)// eslint-disable-line
+    ), job.id)
 
     themePage.close()
+  }
+
+  async _s3Upload (url, srcDir, params) {
+    const trackingUrl = await s3Upload(url, srcDir, params)
+    const page = await this._browser.newPage()
+    await page.goto(trackingUrl)
+    page.close()
   }
 
   async _openThemePage () {

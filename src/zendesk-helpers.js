@@ -64,7 +64,10 @@ function createImportThemeJob () {
 
 async function waitJob (jobId) {
   const status = await graphQl(`{job(id: "${jobId}") { status }}`)
-    .then(json => json.data.job.status)
+    .then(json => {
+      if (json.errors) throw new Error(json.errors[0].message)
+      return json.data.job.status
+    })
 
   return status === 'completed' || delay(250).then(() => waitJob(jobId))
 }
