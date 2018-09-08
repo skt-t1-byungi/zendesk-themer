@@ -4,8 +4,9 @@ import env from './env.json'
 import { resolve } from 'path'
 import fs from 'fs'
 import del from 'del'
+import getBrowser from '../src/getBrowser'
 
-const login = (info = env, opts) => Client.login(info, opts)
+const login = async (info = env, opts) => Client.login(info, await getBrowser(opts))
 
 // must first run for failed login.
 test.serial('login by wrong email, password', async t => {
@@ -38,4 +39,15 @@ test('download', async t => {
 
   t.true(fs.existsSync(saveDir))
   await del(saveDir) // clear
+})
+
+test.only('upload', async t => {
+  const client = await login(env, {
+    // headless: false,
+    // slowMo: 50,
+    // devtool: true
+  })
+
+  await client.uploadTheme(resolve(__dirname, 'fixtures'))
+  t.pass()
 })

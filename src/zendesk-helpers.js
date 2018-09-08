@@ -1,4 +1,6 @@
 /* eslint no-unused-vars: 0 */
+/* eslint-env browser */
+
 async function graphQl (query, variables = null) {
   const headers = new Headers()
   headers.append('X-CSRF-Token', window.THEMING.CSRFToken)
@@ -19,21 +21,45 @@ async function graphQl (query, variables = null) {
 async function exportTheme (themeId) {
   const job = await createExportThemeJob(themeId)
   await waitJob(job.id)
-  return job.url
+  return job.downloadUrl
 }
 
-async function createExportThemeJob (themeId) {
-  const query = `
+function createExportThemeJob (themeId) {
+  return graphQl(`
   mutation($input: CreateExportThemeJobInputType!) {
     createExportThemeJob(input: $input) {
       job_id,
       download_url
     }
-  }`
-  const job = await graphQl(query, { input: {theme_id: themeId} })
+  }`, { input: {theme_id: themeId} })
     .then(json => json.data.createExportThemeJob)
+    .then(job => (
+      {
+        id: job.job_id,
+        downloadUrl: job.download_url
+      }
+    ))
+}
 
-  return {id: job.job_id, url: job.download_url}
+function createImportThemeJob () {
+  return graphQl(`
+  mutation{
+    createImportThemeJob() {
+      job_id,
+      theme_id,
+      upload_url,
+      upload_params
+    }
+  }`)
+    .then(json => json.data.createImportThemeJob)
+    .then(job => (
+      {
+        id: job.job_id,
+        themeId: job.theme_id,
+        uploadUrl: job.upload_url,
+        uploadParams: JSON.parse(job.upload_params)
+      }
+    ))
 }
 
 async function waitJob (jobId) {

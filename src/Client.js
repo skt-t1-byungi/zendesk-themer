@@ -1,40 +1,34 @@
-import puppeteer from 'puppeteer'
+import getBrowser from './getBrowser'
 import url from 'url'
 import download from 'download'
 import path from 'path'
-
-const zenHelpers = path.resolve(__dirname, 'zendesk-helpers.js')
-
-/** @type {puppeteer.Browser} */
-let browser
-let pBrowser
+import s3Upload from './s3-upload'
 
 export default class Client {
-  constructor (domain) {
-    if (!browser) throw new Error('Invalid call.')
+  constructor (browser, domain) {
+    this._browser = browser
     this._domain = domain
     this._host = url.parse(domain).host
   }
 
-  static async login ({domain, email, password}, opts) {
-    if (!pBrowser) pBrowser = puppeteer.launch(opts)
-    if (!browser) browser = await pBrowser
+  static async login ({domain, email, password}, browser) {
+    if (!browser) browser = await getBrowser()
 
-    const client = new this(domain)
+    const client = new this(browser, domain)
 
-    if (!await client._login(email, password)) {
+    if (!await client._attemptLogin(email, password)) {
       throw new Error('Login failed.')
     }
 
     return client
   }
 
-  async _login (email, password) {
-    const page = await browser.newPage()
+  async _attemptLogin (email, password) {
+    const page = await this._browser.newPage()
 
     // move login page
     await page.goto(this._url('/hc/signin'))
-    if (await this._isLogin(page)) return true
+    if (await this._isLoggedIn(page)) return true
 
     const iframe = await (await page.$('iframe')).contentFrame()
     await iframe.waitFor('#login-form')
@@ -47,13 +41,13 @@ export default class Client {
     await iframe.$eval('form#login-form', form => form.submit())
     await p
 
-    const result = await this._isLogin(page)
+    const result = await this._isLoggedIn(page)
     page.close()
 
     return result
   }
 
-  async _isLogin (page) {
+  async _isLoggedIn (page) {
     const cookies = await page.cookies()
     return cookies.some(cookie => cookie.name === '_zendesk_session')
   }
@@ -63,21 +57,35 @@ export default class Client {
   }
 
   async downloadTheme (dest = path.join(process.cwd(), this._host)) {
-    const page = await browser.newPage()
-    await page.goto(this._url('/theming/workbench'))
-    await page.waitFor('a[href^="/theming/theme"]')
+    const themePage = await this._openThemePage()
 
-    // inject helper
-    const pAddScript = page.addScriptTag({path: zenHelpers})
+    const [, themeId] = (await themePage.$eval('a[href^="/theming/theme"]', el => el.href)).match(/\/([^/]*?)$/)
 
-    const [, themeId] = (await page.$eval('a[href^="/theming/theme"]', el => el.href)).match(/\/([^/]*?)$/)
-    await pAddScript
-
-    const downloadUrl = await page.evaluate(themeId => (
+    const downloadUrl = await themePage.evaluate(themeId => (
       exportTheme(themeId) // eslint-disable-line
     ), themeId)
 
-    page.close()
+    themePage.close()
     await download(downloadUrl, dest, { extract: true })
+  }
+
+  async uploadTheme (src) {
+    const themePage = await this._openThemePage()
+
+    const job = await themePage.evaluate(() => (
+      createImportThemeJob()// eslint-disable-line
+    ))
+
+    await s3Upload(job.uploadUrl, src, job.uploadParams)
+
+    themePage.close()
+  }
+
+  async _openThemePage () {
+    const page = await this._browser.newPage()
+    await page.goto(this._url('/theming/workbench'))
+    await page.waitFor('a[href^="/theming/theme"]')
+    await page.addScriptTag({path: path.resolve(__dirname, 'zendesk-helpers.js')})
+    return page
   }
 }
