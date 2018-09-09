@@ -6,6 +6,7 @@ const fs = require('fs')
 const del = require('del')
 const getBrowser = require('../lib/getBrowser')
 
+const testTheme = resolve(__dirname, 'fixtures/theme')
 const login = async (info = env, opts) => Client.login(info, await getBrowser(opts))
 
 // must first run for failed login.
@@ -31,18 +32,42 @@ test('repeat login on same site', async t => {
   t.pass()
 })
 
-test('download', async t => {
+test('getThemeInfos', async t => {
+  const client = await login()
+  const infos = await client.getThemeInfos()
+
+  t.log(infos)
+
+  t.true(Array.isArray(infos))
+})
+
+test('downloadLiveTheme', async t => {
   const client = await login()
 
   const saveDir = resolve(__dirname, '_tmp')
-  await client.downloadCurrentTheme(saveDir)
+  await client.downloadLiveTheme(saveDir)
 
   t.true(fs.existsSync(saveDir))
   await del(saveDir) // clear
 })
 
-test('upload theme', async t => {
+test('uploadTheme, deleteTheme', async t => {
   const client = await login()
-  await client.uploadTheme(resolve(__dirname, 'fixtures'))
-  t.pass()
+  const themeId = await client.uploadTheme(testTheme)
+  const isExists = async () => (await client.getThemeInfos()).some(theme => theme.id === themeId)
+
+  t.true(await isExists())
+  await client.deleteTheme(themeId)
+  t.false(await isExists())
+})
+
+test('updateLiveTheme', async t => {
+  const client = await login()
+  const oldId = await client.getLiveThemeId()
+  const newId = await client.updateLiveTheme(testTheme, {deleteOld: false})
+  t.is(newId, await client.getLiveThemeId())
+
+  // clear
+  await client.setLiveTheme(oldId)
+  await client.deleteTheme(newId)
 })
