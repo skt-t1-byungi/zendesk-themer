@@ -1,10 +1,10 @@
-import Client from '../src/Client'
-import test from 'ava'
-import env from './env.json'
-import { resolve } from 'path'
-import fs from 'fs'
-import del from 'del'
-import getBrowser from '../src/getBrowser'
+const Client = require('../lib/Client')
+const test = require('ava')
+const env = require('./env.json')
+const { resolve } = require('path')
+const fs = require('fs')
+const del = require('del')
+const getBrowser = require('../lib/getBrowser')
 
 const login = async (info = env, opts) => Client.login(info, await getBrowser(opts))
 
@@ -35,19 +35,14 @@ test('download', async t => {
   const client = await login()
 
   const saveDir = resolve(__dirname, '_tmp')
-  await client.downloadTheme(saveDir)
+  await client.downloadCurrentTheme(saveDir)
 
   t.true(fs.existsSync(saveDir))
   await del(saveDir) // clear
 })
 
-test.only('upload', async t => {
-  const client = await login(env, {
-    // headless: false,
-    // slowMo: 50,
-    // devtool: true
-  })
-
+test('upload theme', async t => {
+  const client = await login()
   await client.uploadTheme(resolve(__dirname, 'fixtures'))
   t.pass()
 })
