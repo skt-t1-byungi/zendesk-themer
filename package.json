@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "main": "dist/index.js",
   "license": "MIT",
+  "bin": {
+    "zenth": "./lib/cli.js"
+  },
   "scripts": {
     "test": "ava"
   },
@@ -17,7 +20,11 @@
     "download": "^7.1.0",
     "form-data": "^2.3.2",
     "got": "^9.2.1",
+    "normalize-url": "^3.3.0",
+    "ora-p": "^0.1.2",
+    "prompts": "^1.0.0",
     "puppeteer": "^1.7.0",
+    "sade": "^1.4.1",
     "temp-write": "^3.4.0"
   },
   "eslintConfig": {
