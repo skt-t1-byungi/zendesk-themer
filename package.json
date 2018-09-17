@@ -7,7 +7,7 @@
     "themer": "./lib/cli.js"
   },
   "scripts": {
-    "test": "ava"
+    "test": "ava -s"
   },
   "devDependencies": {
     "ava": "^0.25.0",

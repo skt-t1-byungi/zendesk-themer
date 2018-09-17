@@ -9,7 +9,7 @@ const testTheme = resolve(__dirname, 'fixtures/theme')
 const login = (info = env) => Client.login(info)
 
 // must first run for failed login.
-test.serial('login by wrong email, password', async t => {
+test('login by wrong email, password', async t => {
   await login({
     domain: env.domain,
     email: 'test',
