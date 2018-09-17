@@ -4,10 +4,9 @@ const env = require('./env.json')
 const { resolve } = require('path')
 const fs = require('fs')
 const del = require('del')
-const getBrowser = require('../lib/getBrowser')
 
 const testTheme = resolve(__dirname, 'fixtures/theme')
-const login = async (info = env, opts) => Client.login(info, await getBrowser(opts))
+const login = (info = env) => Client.login(info)
 
 // must first run for failed login.
 test.serial('login by wrong email, password', async t => {
