@@ -26,7 +26,8 @@
     "prompts": "^1.0.0",
     "puppeteer": "^1.7.0",
     "sade": "^1.4.1",
-    "temp-write": "^3.4.0"
+    "temp-write": "^3.4.0",
+    "write-json-file": "^3.0.2"
   },
   "eslintConfig": {
     "extends": "byungi"
