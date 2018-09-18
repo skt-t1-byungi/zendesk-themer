@@ -19,6 +19,7 @@
     "archiver": "^3.0.0",
     "download": "^7.1.0",
     "form-data": "^2.3.2",
+    "fs-extra": "^7.0.0",
     "got": "^9.2.1",
     "load-json-file": "^5.0.0",
     "normalize-url": "^3.3.0",
