@@ -13,7 +13,7 @@ npm i -g zendesk-themer
 ```
 
 ## Usage
-### themer themer up \<src> [options]
+### themer up \<src> [options]
 ```sh
 $ themer up --help
 
