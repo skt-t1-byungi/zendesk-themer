@@ -1,9 +1,9 @@
 # zendesk-themer
 CLI for zendesk hc theme deploy
 
-<div style="text-align:center;">
+<p align="center">
     <img src="demo.gif" alt="demo">
-</div>
+</p>
 
 ⚠️ This package is made using a [puppeteer](https://github.com/GoogleChrome/puppeteer). **It's very easy to break**.
 
