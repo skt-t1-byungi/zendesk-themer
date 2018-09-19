@@ -31,7 +31,7 @@ $ themer up --help
   Examples
     $ themer themer up themes/test-theme/
     $ themer themer up themer.json
-    $ themer themer up themes/**/themer.json -m
+    $ themer themer up themes/**/themer.json --multiple
 ```
 
 ### themer down [options]
@@ -50,7 +50,7 @@ $ themer down --help
 
   Examples
     $ themer themer down
-    $ themer themer down -config themer.json
+    $ themer themer down --config themer.json
 ```
 
 ## themer.json
