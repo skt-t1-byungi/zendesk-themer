@@ -68,7 +68,7 @@ $ themer down --help
 - `email` - Required. Email for zendesk login.
 - `password` - Required. Password for zendesk login.
 - `target` - Required. Theme path to upload.
-- `theme_path` - Optional. If it exists, copy files except the "settings/" directory.
+- `theme_path` - Optional. If it exists, upload files in that directory along with the "settings/" directory of "target".
 
 ## License
 MIT
