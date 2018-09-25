@@ -29,9 +29,9 @@ $ themer up --help
     -h, --help        Displays this message
 
   Examples
-    $ themer themer up themes/test-theme/
-    $ themer themer up themer.json
-    $ themer themer up themes/**/themer.json --multiple
+    $ themer up themes/test-theme/
+    $ themer up themer.json
+    $ themer up themes/**/themer.json --multiple
 ```
 
 ### themer down [options]
@@ -49,8 +49,8 @@ $ themer down --help
     -h, --help      Displays this message
 
   Examples
-    $ themer themer down
-    $ themer themer down --config themer.json
+    $ themer down
+    $ themer down --config themer.json
 ```
 
 ## themer.json

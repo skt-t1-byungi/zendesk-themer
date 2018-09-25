@@ -2,7 +2,7 @@
   "name": "zendesk-themer",
   "description": "CLI for zendesk hc theme deploy",
   "version": "0.0.3",
-  "main": "./lib/cli.js",
+  "main": "./lib/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/skt-t1-byungi/zendesk-themer.git"
@@ -40,12 +40,13 @@
     "globby": "^8.0.1",
     "got": "^9.2.1",
     "load-json-file": "^5.0.0",
+    "mergeri": "^0.0.3",
     "normalize-url": "^3.3.0",
     "ora": "^3.0.0",
     "prompts": "^1.0.0",
     "puppeteer": "^1.7.0",
     "sade": "^1.4.1",
-    "temp-write": "^3.4.0",
+    "unique-filename": "^1.1.1",
     "write-json-file": "^3.0.2"
   },
   "eslintConfig": {
