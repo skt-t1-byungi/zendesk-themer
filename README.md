@@ -1,6 +1,8 @@
 # zendesk-themer
 CLI for zendesk hc theme deploy
 
+[![npm](https://img.shields.io/npm/v/zendesk-themer.svg?style=flat-square)](https://www.npmjs.com/package/zendesk-themer)
+
 <p align="center">
     <img src="demo.gif" alt="demo">
 </p>
