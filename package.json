@@ -27,25 +27,25 @@
     "test": "ava -s"
   },
   "devDependencies": {
-    "ava": "^0.25.0",
+    "ava": "^1.0.1",
     "del": "^3.0.0",
-    "eslint": "^5.5.0",
-    "eslint-config-byungi": "^0.2.0"
+    "eslint": "^5.11.0",
+    "eslint-config-byungi": "^0.2.3"
   },
   "dependencies": {
     "archiver": "^3.0.0",
     "download": "^7.1.0",
-    "form-data": "^2.3.2",
-    "fs-extra": "^7.0.0",
+    "form-data": "^2.3.3",
+    "fs-extra": "^7.0.1",
     "globby": "^8.0.1",
-    "got": "^9.2.1",
+    "got": "^9.5.0",
     "load-json-file": "^5.0.0",
     "mergeri": "^0.0.3",
-    "normalize-url": "^3.3.0",
+    "normalize-url": "^4.1.0",
     "ora": "^3.0.0",
-    "prompts": "^1.0.0",
-    "puppeteer": "^1.7.0",
-    "sade": "^1.4.1",
+    "prompts": "^2.0.0",
+    "puppeteer": "^1.11.0",
+    "sade": "^1.4.2",
     "unique-filename": "^1.1.1",
     "write-json-file": "^3.0.2"
   },
