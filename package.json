@@ -34,6 +34,7 @@
   },
   "dependencies": {
     "archiver": "^3.0.0",
+    "chrome-finder": "^1.0.5",
     "download": "^7.1.0",
     "form-data": "^2.3.3",
     "fs-extra": "^7.0.1",
@@ -44,7 +45,7 @@
     "normalize-url": "^4.1.0",
     "ora": "^3.0.0",
     "prompts": "^2.0.0",
-    "puppeteer": "^1.11.0",
+    "puppeteer-core": "^1.11.0",
     "sade": "^1.4.2",
     "unique-filename": "^1.1.1",
     "write-json-file": "^3.0.2"
