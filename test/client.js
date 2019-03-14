@@ -64,7 +64,7 @@ test('uploadTheme, deleteTheme', async t => {
 test('updateLiveTheme', async t => {
     const client = await login()
     const oldId = await client.getLiveThemeId()
-    const newId = await client.updateLiveTheme(testTheme, { deleteOld: false })
+    const newId = await client.updateLiveTheme(testTheme, { persist: true })
     t.is(newId, await client.getLiveThemeId())
 
     // clear
