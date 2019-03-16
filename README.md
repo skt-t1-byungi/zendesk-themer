@@ -24,17 +24,16 @@ $ themer up --help
     Upload a live theme.
 
   Usage
-    $ themer up <src> [options]
+    $ themer up <path> [options]
 
   Options
-    -p, --persist     No remove a old theme.
-    -m, --multiple    Upload multiple themes.
-    -h, --help        Displays this message
+    -p, --persist    No remove a old theme.
+    -h, --help       Displays this message
 
   Examples
-    $ themer up themes/test-theme/
-    $ themer up themer.json
-    $ themer up themes/**/themer.json --multiple
+    $ themer up
+    $ themer up themes/test-theme/ -p
+    $ themer up themes/*/themer.json
 ```
 
 ### themer down [options]
@@ -45,15 +44,15 @@ $ themer down --help
     Download live theme.
 
   Usage
-    $ themer down [options]
+    $ themer down <path> [options]
 
   Options
-    -c, --config    Using config file.
-    -h, --help      Displays this message
+    -h, --help    Displays this message
 
   Examples
     $ themer down
-    $ themer down --config themer.json
+    $ themer down ./theme
+    $ themer down */themer.json
 ```
 
 ## themer.json
