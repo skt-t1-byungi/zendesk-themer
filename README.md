@@ -16,7 +16,7 @@ npm i -g zendesk-themer
 ```
 
 ## Usage
-### themer up \<src> [options]
+### themer up \<path> [options]
 ```sh
 $ themer up --help
 
@@ -36,7 +36,7 @@ $ themer up --help
     $ themer up themes/*/themer.json
 ```
 
-### themer down [options]
+### themer down \<path> [options]
 ```sh
 $ themer down --help
 
