@@ -1,11 +1,11 @@
 const Client = require('../lib/Client')
-const test = require('ava')
+const test = require('ava').serial
 const env = require('./env.json')
 const { resolve } = require('path')
 const fs = require('fs')
 const del = require('del')
 
-const testTheme = resolve(__dirname, 'fixtures/theme')
+const testTheme = resolve(__dirname, 'fixtures/theme/')
 const login = (info = env) => Client.login(info)
 
 // must first run for failed login.
@@ -21,7 +21,6 @@ test('login by wrong email, password', async t => {
 
 test('success login', async t => {
     const client = await login()
-
     t.true(client instanceof Client)
 })
 
