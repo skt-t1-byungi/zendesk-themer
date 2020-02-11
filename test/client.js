@@ -14,9 +14,7 @@ test('login by wrong email, password', async t => {
         domain: env.domain,
         email: 'test',
         password: 'wrong'
-    })
-        .then(() => t.fail())
-        .catch(() => t.pass())
+    }).then(() => t.fail()).catch(() => t.pass())
 })
 
 test('success login', async t => {
