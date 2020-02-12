@@ -1,7 +1,7 @@
 {
     "name": "zendesk-themer",
     "description": "CLI for zendesk hc theme deploy",
-    "version": "0.3.2",
+    "version": "0.4.0",
     "main": "./lib/index.js",
     "repository": {
         "type": "git",
